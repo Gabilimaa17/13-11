@@ -1,3 +1,4 @@
+import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
@@ -36,14 +37,34 @@ setLocalizacao(posicaoNativa);
       ) : (
         <Text style={styles.errorText0}>Acesso bloqueado. O app não funcionará.</Text>
       )}
+
       
-      {localizacao ? (
-    <Text style={{color: 'red'}}>
-        Lat: {localizacao.coords.latitude} | Lng: {localizacao.coords.longitude}
-    </Text>
+    {localizacao ? (
+    <MapView 
+        style={styles.mapaForte}
+        initialRegion={{
+            latitude: localizacao.coords.latitude,
+            longitude: localizacao.coords.longitude,
+            latitudeDelta: 0.005, // O nível do "Zoom"
+            longitudeDelta: 0.005,
+        }}
+    >
+        {/* O Alfinete Vermelho espetado no chão do mapa! */}
+        <Marker 
+            coordinate={{
+                latitude: localizacao.coords.latitude,
+                longitude: localizacao.coords.longitude,
+            }}
+            title="Eu estou aqui!"
+            description="Defeito do motor"
+        />
+    </MapView>
 ) : (
-    <Text>Procurando Satélites...</Text>
+    <Text>Buscando sua posição pelo Satélite...</Text>
 )}
+ : (
+    <Text>Procurando Satélites...</Text>
+)
     </View>
     
   );
@@ -66,4 +87,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     
   },
+  mapaForte: {
+  width: '100%',
+  height:'100%', // Altura travada, ou use flex: 1 se for uma aba só para ele!
+  borderRadius: 10,
+  marginTop: 20
+}
 });
